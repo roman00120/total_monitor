@@ -1,0 +1,2 @@
+namespace TotalMonitor.Core.Interfaces;
+public interface ISerialPortService : IAsyncDisposable { bool IsOpen { get; } string PortName { get; } Task OpenAsync(CancellationToken cancellationToken = default); Task CloseAsync(); Task WriteAsync(ReadOnlyMemory<byte> data, CancellationToken cancellationToken = default); Task<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default); }

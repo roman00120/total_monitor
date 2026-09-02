@@ -1,0 +1,31 @@
+## Build results
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+publish/
+dist/
+
+## Visual Studio / VS Code
+.vs/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.DotSettings.user
+
+## Test & Coverage
+[Tt]est[Rr]esult*/
+coverage/
+*.coverage
+*.coveragexml
+
+## OS generated
+.DS_Store
+Thumbs.db
+desktop.ini
+
+## Inno Setup compiled installer output (keep scripts & assets)
+installer/Output/
+*.tmp

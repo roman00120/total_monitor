@@ -1,0 +1,35 @@
+<Window x:Class="TotalMonitor.App.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="TOTAL MONITOR - Iniciar sesión"
+        Width="500" Height="600" MinWidth="420" MinHeight="520"
+        WindowStartupLocation="CenterScreen" ResizeMode="CanResize"
+        Background="{StaticResource BackgroundBrush}">
+  <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+    <Border Margin="28" Padding="30" Background="White" CornerRadius="10">
+      <StackPanel>
+        <Image Source="/Assets/Logo/Total-Monitor.png"
+               Height="105" MaxWidth="340" Stretch="Uniform"
+               HorizontalAlignment="Center" Margin="0,0,0,24"/>
+        <TextBlock Text="Acceso seguro al sistema" Foreground="#627D98"
+                   HorizontalAlignment="Center" Margin="0,0,0,24"/>
+        <TextBlock Text="Usuario"/>
+        <TextBox x:Name="UsernameBox" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
+                 KeyDown="LoginField_KeyDown" Margin="0,5,0,14" Height="32"/>
+        <TextBlock Text="Contraseña"/>
+        <PasswordBox x:Name="PasswordBox" PasswordChanged="PasswordBox_Changed"
+                     KeyDown="LoginField_KeyDown" Margin="0,5,0,18" Height="32"/>
+        <Button x:Name="LoginButton" Content="Iniciar sesión" Command="{Binding LoginCommand}"
+                IsDefault="True" IsEnabled="{Binding CanLogin}"
+                Background="{StaticResource AccentBrush}"
+                HorizontalContentAlignment="Center" Height="42"/>
+        <TextBlock Text="{Binding StatusMessage}" Foreground="#627D98"
+                   TextWrapping="Wrap" Margin="0,14,0,0"
+                   HorizontalAlignment="Center"/>
+        <TextBlock Text="{Binding ErrorMessage}" Foreground="#B23A48"
+                   TextWrapping="Wrap" Margin="0,6,0,0"
+                   HorizontalAlignment="Center"/>
+      </StackPanel>
+    </Border>
+  </ScrollViewer>
+</Window>

@@ -1,0 +1,297 @@
+<UserControl x:Class="TotalMonitor.App.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+  <UserControl.Resources>
+    <Style x:Key="FormLabelStyle" TargetType="TextBlock">
+      <Setter Property="FontSize" Value="12"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="Foreground" Value="#486581"/>
+      <Setter Property="Margin" Value="0,0,0,4"/>
+    </Style>
+    <Style x:Key="FormTextBoxStyle" TargetType="TextBox">
+      <Setter Property="Height" Value="36"/>
+      <Setter Property="Padding" Value="10,7"/>
+      <Setter Property="FontSize" Value="13"/>
+      <Setter Property="BorderBrush" Value="#CBD2D9"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="Background" Value="White"/>
+      <Setter Property="Foreground" Value="#102A43"/>
+      <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+    <Style x:Key="FormComboBoxStyle" TargetType="ComboBox">
+      <Setter Property="Height" Value="36"/>
+      <Setter Property="Padding" Value="10,6"/>
+      <Setter Property="FontSize" Value="13"/>
+      <Setter Property="BorderBrush" Value="#CBD2D9"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="Background" Value="White"/>
+      <Setter Property="Foreground" Value="#102A43"/>
+      <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+    <Style x:Key="SectionHeaderStyle" TargetType="TextBlock">
+      <Setter Property="FontSize" Value="15"/>
+      <Setter Property="FontWeight" Value="Bold"/>
+      <Setter Property="Foreground" Value="#102A43"/>
+      <Setter Property="Margin" Value="0,0,0,16"/>
+    </Style>
+    <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+      <Setter Property="Background" Value="#16B8A6"/>
+      <Setter Property="Foreground" Value="White"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="FontSize" Value="13"/>
+      <Setter Property="Height" Value="38"/>
+      <Setter Property="Padding" Value="16,0"/>
+      <Setter Property="BorderThickness" Value="0"/>
+      <Setter Property="Cursor" Value="Hand"/>
+    </Style>
+    <Style x:Key="SecondaryButtonStyle" TargetType="Button">
+      <Setter Property="Background" Value="#E2E8F0"/>
+      <Setter Property="Foreground" Value="#102A43"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="FontSize" Value="13"/>
+      <Setter Property="Height" Value="38"/>
+      <Setter Property="Padding" Value="14,0"/>
+      <Setter Property="BorderThickness" Value="0"/>
+      <Setter Property="Cursor" Value="Hand"/>
+    </Style>
+    <Style x:Key="DangerButtonStyle" TargetType="Button">
+      <Setter Property="Background" Value="#E53E3E"/>
+      <Setter Property="Foreground" Value="White"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="FontSize" Value="13"/>
+      <Setter Property="Height" Value="38"/>
+      <Setter Property="Padding" Value="16,0"/>
+      <Setter Property="BorderThickness" Value="0"/>
+      <Setter Property="Cursor" Value="Hand"/>
+    </Style>
+  </UserControl.Resources>
+
+  <StackPanel>
+    <!-- Live Acquisition Status Banner -->
+    <Border Background="White" CornerRadius="8" Padding="18,14" Margin="0,0,0,20" BorderBrush="#E2E8F0" BorderThickness="1">
+      <DockPanel LastChildFill="True">
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+          <TextBlock Text="Estado del hardware:" FontWeight="SemiBold" FontSize="14" Foreground="#486581" VerticalAlignment="Center" Margin="0,0,10,0"/>
+          <Border Background="{Binding HardwareStateColor}" CornerRadius="12" Padding="12,4">
+            <TextBlock Text="{Binding HardwareStateText}" Foreground="White" FontWeight="Bold" FontSize="12"/>
+          </Border>
+          <TextBlock Text="  •  " Foreground="#9FB3C8" VerticalAlignment="Center" Margin="8,0"/>
+          <TextBlock Text="{Binding OperationModeText}" FontWeight="SemiBold" Foreground="#486581" VerticalAlignment="Center"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Center">
+          <TextBlock Text="Lecturas reales:" Foreground="#627D98" FontSize="13" VerticalAlignment="Center" Margin="0,0,4,0"/>
+          <TextBlock Text="{Binding ProcessedReadingsCount}" FontWeight="Bold" Foreground="#102A43" FontSize="14" VerticalAlignment="Center" Margin="0,0,16,0"/>
+          <TextBlock Text="Última:" Foreground="#627D98" FontSize="13" VerticalAlignment="Center" Margin="0,0,4,0"/>
+          <TextBlock Text="{Binding LastReadingText}" FontWeight="SemiBold" Foreground="#102A43" FontSize="13" VerticalAlignment="Center"/>
+        </StackPanel>
+      </DockPanel>
+    </Border>
+
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="1.1*"/>
+        <ColumnDefinition Width="20"/>
+        <ColumnDefinition Width="0.9*"/>
+      </Grid.ColumnDefinitions>
+
+      <!-- LEFT COLUMN: RS485 & Communication Config -->
+      <StackPanel Grid.Column="0">
+        <!-- Communication RS485 Panel -->
+        <Border Style="{StaticResource PanelStyle}" Margin="0,0,0,20">
+          <StackPanel>
+            <TextBlock Text="COMUNICACIÓN RS485 / MODBUS RTU" Style="{StaticResource SectionHeaderStyle}"/>
+
+            <!-- Hardware Detection Status -->
+            <Border Background="#F0F4F8" CornerRadius="6" Padding="12,8" Margin="0,0,0,14">
+              <StackPanel Orientation="Vertical">
+                <TextBlock Text="{Binding HardwareDetectionText}" FontWeight="SemiBold" Foreground="#102A43" FontSize="12"/>
+                <TextBlock Text="* La presencia de puerto COM indica interfaz serial disponible, no confirma respuesta del TOV452." Foreground="#627D98" FontSize="11" Margin="0,2,0,0"/>
+              </StackPanel>
+            </Border>
+
+            <!-- COM Port & Refresh -->
+            <Grid Margin="0,0,0,14">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="Auto"/>
+              </Grid.ColumnDefinitions>
+              <StackPanel Grid.Column="0">
+                <TextBlock Text="Puerto COM" Style="{StaticResource FormLabelStyle}"/>
+                <ComboBox ItemsSource="{Binding AvailablePorts}" SelectedItem="{Binding SelectedPort}" Style="{StaticResource FormComboBoxStyle}"/>
+              </StackPanel>
+              <StackPanel Grid.Column="2" VerticalAlignment="Bottom">
+                <Button Content="Actualizar puertos" Command="{Binding RefreshPortsCommand}" Style="{StaticResource SecondaryButtonStyle}"/>
+              </StackPanel>
+            </Grid>
+
+            <!-- Baud Rate & Parity -->
+            <Grid Margin="0,0,0,14">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="14"/>
+                <ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+              <StackPanel Grid.Column="0">
+                <TextBlock Text="Baud rate" Style="{StaticResource FormLabelStyle}"/>
+                <ComboBox ItemsSource="{Binding AvailableBaudRates}" SelectedItem="{Binding SelectedBaudRate}" Style="{StaticResource FormComboBoxStyle}"/>
+              </StackPanel>
+              <StackPanel Grid.Column="2">
+                <TextBlock Text="Paridad" Style="{StaticResource FormLabelStyle}"/>
+                <ComboBox ItemsSource="{Binding AvailableParities}" SelectedItem="{Binding SelectedParity}" Style="{StaticResource FormComboBoxStyle}"/>
+              </StackPanel>
+            </Grid>
+
+            <!-- Data Bits & Stop Bits -->
+            <Grid Margin="0,0,0,14">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="14"/>
+                <ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+              <StackPanel Grid.Column="0">
+                <TextBlock Text="Data bits" Style="{StaticResource FormLabelStyle}"/>
+                <TextBox Text="{Binding DataBits, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FormTextBoxStyle}"/>
+              </StackPanel>
+              <StackPanel Grid.Column="2">
+                <TextBlock Text="Stop bits" Style="{StaticResource FormLabelStyle}"/>
+                <ComboBox ItemsSource="{Binding AvailableStopBits}" SelectedItem="{Binding SelectedStopBits}" Style="{StaticResource FormComboBoxStyle}"/>
+              </StackPanel>
+            </Grid>
+
+            <!-- Timeout (ms) -->
+            <StackPanel Margin="0,0,0,16">
+              <TextBlock Text="Timeout (ms)" Style="{StaticResource FormLabelStyle}"/>
+              <TextBox Text="{Binding ReadTimeout, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FormTextBoxStyle}"/>
+            </StackPanel>
+
+            <!-- Test Connection Button & Result -->
+            <Button Content="Probar comunicación" Command="{Binding TestCommunicationCommand}" Style="{StaticResource SecondaryButtonStyle}" Margin="0,4,0,10"/>
+
+            <!-- Test Result Banner -->
+            <Border Visibility="{Binding TestResult, Converter={x:Null}}" Margin="0,4,0,0">
+              <TextBlock Text="{Binding TestResult}" FontSize="13" FontWeight="SemiBold" TextWrapping="Wrap"/>
+            </Border>
+          </StackPanel>
+        </Border>
+
+        <!-- Meter Configuration Panel -->
+        <Border Style="{StaticResource PanelStyle}">
+          <StackPanel>
+            <TextBlock Text="MEDIDOR" Style="{StaticResource SectionHeaderStyle}"/>
+
+            <Grid Margin="0,0,0,14">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.5*"/>
+                <ColumnDefinition Width="14"/>
+                <ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+              <StackPanel Grid.Column="0">
+                <TextBlock Text="Nombre" Style="{StaticResource FormLabelStyle}"/>
+                <TextBox Text="{Binding MeterName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FormTextBoxStyle}"/>
+              </StackPanel>
+              <StackPanel Grid.Column="2">
+                <TextBlock Text="Modelo" Style="{StaticResource FormLabelStyle}"/>
+                <ComboBox ItemsSource="{Binding AvailableModels}" SelectedItem="{Binding SelectedModel}" Style="{StaticResource FormComboBoxStyle}"/>
+              </StackPanel>
+            </Grid>
+
+            <Grid Margin="0,0,0,16">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="14"/>
+                <ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+              <StackPanel Grid.Column="0">
+                <TextBlock Text="Dirección Modbus" Style="{StaticResource FormLabelStyle}"/>
+                <TextBox Text="{Binding MeterAddress, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FormTextBoxStyle}"/>
+              </StackPanel>
+              <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="0,18,0,0">
+                <CheckBox Content="Medidor Activo" IsChecked="{Binding IsMeterEnabled}" FontWeight="SemiBold" Foreground="#102A43"/>
+              </StackPanel>
+            </Grid>
+
+            <Button Content="Guardar configuración" Command="{Binding SaveSettingsCommand}" Style="{StaticResource PrimaryButtonStyle}"/>
+
+            <TextBlock Text="{Binding SaveMessage}" Margin="0,10,0,0" FontSize="13" FontWeight="SemiBold" TextWrapping="Wrap"/>
+          </StackPanel>
+        </Border>
+      </StackPanel>
+
+      <!-- RIGHT COLUMN: Acquisition Engine & Realtime Metrics -->
+      <StackPanel Grid.Column="2">
+        <Border Style="{StaticResource PanelStyle}" Margin="0,0,0,20">
+          <StackPanel>
+            <TextBlock Text="MOTOR DE ADQUISICIÓN" Style="{StaticResource SectionHeaderStyle}"/>
+
+            <StackPanel Margin="0,0,0,18">
+              <TextBlock Text="Intervalo de adquisición (ms)" Style="{StaticResource FormLabelStyle}"/>
+              <TextBox Text="{Binding PollingInterval, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FormTextBoxStyle}"/>
+            </StackPanel>
+
+            <!-- Control Buttons -->
+            <Grid Margin="0,0,0,20">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+              <Button Grid.Column="0" Content="INICIAR ADQUISICIÓN" Command="{Binding StartAcquisitionCommand}" Style="{StaticResource PrimaryButtonStyle}"/>
+              <Button Grid.Column="2" Content="DETENER" Command="{Binding StopAcquisitionCommand}" Style="{StaticResource DangerButtonStyle}"/>
+            </Grid>
+
+            <!-- Acquisition Details Table -->
+            <TextBlock Text="ESTADO EN TIEMPO REAL" Style="{StaticResource FormLabelStyle}" Margin="0,0,0,10"/>
+            <Border Background="#F4F7FA" CornerRadius="6" Padding="16">
+              <StackPanel>
+                <DockPanel Margin="0,0,0,8">
+                  <TextBlock Text="Estado:" Foreground="#627D98" FontWeight="SemiBold"/>
+                  <TextBlock Text="{Binding HardwareStateText}" DockPanel.Dock="Right" FontWeight="Bold" Foreground="{Binding HardwareStateColor}"/>
+                </DockPanel>
+                <Separator Background="#E2E8F0" Margin="0,4,0,8"/>
+
+                <DockPanel Margin="0,0,0,8">
+                  <TextBlock Text="Modo de ejecución:" Foreground="#627D98" FontWeight="SemiBold"/>
+                  <TextBlock Text="{Binding OperationModeText}" DockPanel.Dock="Right" FontWeight="Bold" Foreground="#102A43"/>
+                </DockPanel>
+                <Separator Background="#E2E8F0" Margin="0,4,0,8"/>
+
+                <DockPanel Margin="0,0,0,8">
+                  <TextBlock Text="Puerto serial:" Foreground="#627D98" FontWeight="SemiBold"/>
+                  <TextBlock Text="{Binding CurrentPortText}" DockPanel.Dock="Right" FontWeight="Bold" Foreground="#102A43"/>
+                </DockPanel>
+                <Separator Background="#E2E8F0" Margin="0,4,0,8"/>
+
+                <DockPanel Margin="0,0,0,8">
+                  <TextBlock Text="Medidores activos:" Foreground="#627D98" FontWeight="SemiBold"/>
+                  <TextBlock Text="{Binding ActiveMetersCount}" DockPanel.Dock="Right" FontWeight="Bold" Foreground="#102A43"/>
+                </DockPanel>
+                <Separator Background="#E2E8F0" Margin="0,4,0,8"/>
+
+                <DockPanel Margin="0,0,0,8">
+                  <TextBlock Text="Última adquisición:" Foreground="#627D98" FontWeight="SemiBold"/>
+                  <TextBlock Text="{Binding LastReadingText}" DockPanel.Dock="Right" FontWeight="Bold" Foreground="#102A43"/>
+                </DockPanel>
+                <Separator Background="#E2E8F0" Margin="0,4,0,8"/>
+
+                <DockPanel Margin="0,0,0,8">
+                  <TextBlock Text="Lecturas procesadas:" Foreground="#627D98" FontWeight="SemiBold"/>
+                  <TextBlock Text="{Binding ProcessedReadingsCount}" DockPanel.Dock="Right" FontWeight="Bold" Foreground="#138A72"/>
+                </DockPanel>
+                <Separator Background="#E2E8F0" Margin="0,4,0,8"/>
+
+                <DockPanel>
+                  <TextBlock Text="Último error:" Foreground="#627D98" FontWeight="SemiBold"/>
+                  <TextBlock Text="{Binding LastErrorText}" DockPanel.Dock="Right" FontWeight="SemiBold" Foreground="#B23A48" TextTrimming="CharacterEllipsis"/>
+                </DockPanel>
+              </StackPanel>
+            </Border>
+          </StackPanel>
+        </Border>
+      </StackPanel>
+    </Grid>
+  </StackPanel>
+</UserControl>

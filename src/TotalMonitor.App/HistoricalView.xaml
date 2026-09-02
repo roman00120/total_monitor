@@ -1,0 +1,119 @@
+<UserControl x:Class="TotalMonitor.App.HistoricalView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:TotalMonitor.App">
+  <Grid Margin="0,0,0,20">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+
+    <!-- Header -->
+    <StackPanel Grid.Row="0" Margin="0,0,0,16">
+      <TextBlock Text="Consulta de Datos Históricos" FontSize="20" FontWeight="SemiBold" Foreground="#102A43"/>
+      <TextBlock Text="Consulte, grafique y exporte las mediciones eléctricas almacenadas en MySQL." Foreground="#627D98" Margin="0,4,0,0"/>
+    </StackPanel>
+
+    <!-- Filter Card -->
+    <Border Grid.Row="1" Background="White" CornerRadius="8" Padding="16" Margin="0,0,0,16"
+            BorderBrush="#CBD2D9" BorderThickness="1">
+      <StackPanel>
+        <Grid Margin="0,0,0,12">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
+          <StackPanel Margin="0,0,12,0">
+            <TextBlock Text="Medidor" FontWeight="Medium" Foreground="#334E68" Margin="0,0,0,4"/>
+            <ComboBox ItemsSource="{Binding MeterOptions}" SelectedItem="{Binding SelectedMeter}" DisplayMemberPath="Name" Height="32"/>
+          </StackPanel>
+          <StackPanel Grid.Column="1" Margin="0,0,12,0">
+            <TextBlock Text="Variable" FontWeight="Medium" Foreground="#334E68" Margin="0,0,0,4"/>
+            <ComboBox ItemsSource="{Binding Variables}" SelectedItem="{Binding SelectedVariable}" Height="32"/>
+          </StackPanel>
+          <StackPanel Grid.Column="2" Margin="0,0,12,0">
+            <TextBlock Text="Desde" FontWeight="Medium" Foreground="#334E68" Margin="0,0,0,4"/>
+            <DatePicker SelectedDate="{Binding FromDate}" Height="32"/>
+          </StackPanel>
+          <StackPanel Grid.Column="3" Margin="0,0,12,0">
+            <TextBlock Text="Hasta" FontWeight="Medium" Foreground="#334E68" Margin="0,0,0,4"/>
+            <DatePicker SelectedDate="{Binding ToDate}" Height="32"/>
+          </StackPanel>
+          <Button Grid.Column="4" Content="CONSULTAR" Command="{Binding QueryCommand}"
+                  Background="#16B8A6" Foreground="White" FontWeight="SemiBold"
+                  Padding="16,0" Height="32" VerticalAlignment="Bottom" BorderThickness="0" Cursor="Hand"/>
+        </Grid>
+
+        <!-- Quick Filters & Export -->
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Rango rápido:" VerticalAlignment="Center" Foreground="#627D98" Margin="0,0,8,0" FontWeight="Medium"/>
+            <Button Content="Última hora" Command="{Binding LastHourCommand}" Background="#E2E8F0" Foreground="#243B53"
+                    Padding="10,4" Margin="0,0,6,0" BorderThickness="0" Cursor="Hand"/>
+            <Button Content="Hoy" Command="{Binding TodayCommand}" Background="#E2E8F0" Foreground="#243B53"
+                    Padding="10,4" Margin="0,0,6,0" BorderThickness="0" Cursor="Hand"/>
+            <Button Content="Ayer" Command="{Binding YesterdayCommand}" Background="#E2E8F0" Foreground="#243B53"
+                    Padding="10,4" Margin="0,0,6,0" BorderThickness="0" Cursor="Hand"/>
+            <Button Content="Últimos 7 días" Command="{Binding Last7DaysCommand}" Background="#E2E8F0" Foreground="#243B53"
+                    Padding="10,4" Margin="0,0,6,0" BorderThickness="0" Cursor="Hand"/>
+          </StackPanel>
+          <Button Grid.Column="1" Content="EXPORTAR CSV" Command="{Binding ExportCommand}"
+                  Background="#243B53" Foreground="White" FontWeight="SemiBold"
+                  Padding="14,6" Height="32" BorderThickness="0" Cursor="Hand"/>
+        </Grid>
+      </StackPanel>
+    </Border>
+
+    <!-- Chart Panel -->
+    <Border Grid.Row="2" Style="{StaticResource PanelStyle}" Margin="0,0,0,16">
+      <StackPanel>
+        <TextBlock Text="Tendencia Gráfica Histórica" FontWeight="SemiBold" Foreground="#102A43" Margin="0,0,0,8"/>
+        <local:HistoricalChart Points="{Binding ChartPoints}" Height="120"/>
+        <TextBlock Text="{Binding Message}" Foreground="#627D98" Margin="0,8,0,0" FontSize="12"/>
+      </StackPanel>
+    </Border>
+
+    <!-- Results Table -->
+    <Border Grid.Row="3" Background="White" CornerRadius="8" Padding="16" BorderBrush="#CBD2D9" BorderThickness="1">
+      <ListView ItemsSource="{Binding Results}" VirtualizingPanel.IsVirtualizing="True" MinHeight="180">
+        <ListView.View>
+          <GridView>
+            <GridViewColumn Header="FECHA / HORA" DisplayMemberBinding="{Binding Timestamp}" Width="160"/>
+            <GridViewColumn Header="MEDIDOR" DisplayMemberBinding="{Binding MeterName}" Width="160"/>
+            <GridViewColumn Header="VARIABLE" DisplayMemberBinding="{Binding Variable}" Width="140"/>
+            <GridViewColumn Header="VALOR" DisplayMemberBinding="{Binding Value}" Width="100"/>
+            <GridViewColumn Header="UNIDAD" DisplayMemberBinding="{Binding Unit}" Width="70"/>
+            <GridViewColumn Header="ORIGEN" DisplayMemberBinding="{Binding Origin}" Width="110"/>
+          </GridView>
+        </ListView.View>
+      </ListView>
+    </Border>
+
+    <!-- Pagination -->
+    <Grid Grid.Row="4" Margin="0,10,0,0">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+      </Grid.ColumnDefinitions>
+      <TextBlock Text="{Binding TotalCount, StringFormat='Total de registros: {0}'}"
+                 VerticalAlignment="Center" Foreground="#627D98" FontWeight="Medium"/>
+      <StackPanel Grid.Column="1" Orientation="Horizontal">
+        <Button Content="Anterior" Command="{Binding PreviousCommand}" IsEnabled="{Binding CanGoPrevious}"
+                Background="#E2E8F0" Foreground="#243B53" Padding="12,4" Margin="0,0,8,0" BorderThickness="0"/>
+        <TextBlock Text="{Binding PageNumber, StringFormat='Página {0}'}" VerticalAlignment="Center" Margin="0,0,8,0" FontWeight="SemiBold"/>
+        <Button Content="Siguiente" Command="{Binding NextCommand}" IsEnabled="{Binding CanGoNext}"
+                Background="#E2E8F0" Foreground="#243B53" Padding="12,4" BorderThickness="0"/>
+      </StackPanel>
+    </Grid>
+  </Grid>
+</UserControl>

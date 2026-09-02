@@ -1,0 +1,3 @@
+using TotalMonitor.Core.Modbus;
+namespace TotalMonitor.Core.Interfaces;
+public interface IModbusRegisterReader { Task<ModbusResponse> ReadHoldingRegistersAsync(byte slaveAddress, ushort address, ushort quantity, CancellationToken cancellationToken = default); Task<ModbusResponse> ReadInputRegistersAsync(byte slaveAddress, ushort address, ushort quantity, CancellationToken cancellationToken = default); Task<ModbusResponse> ReadCoilsAsync(byte slaveAddress, ushort address, ushort quantity, CancellationToken cancellationToken = default); Task<ModbusResponse> ReadDiscreteInputsAsync(byte slaveAddress, ushort address, ushort quantity, CancellationToken cancellationToken = default); }

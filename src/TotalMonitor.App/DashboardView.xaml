@@ -1,0 +1,100 @@
+<UserControl x:Class="TotalMonitor.App.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+    <StackPanel Margin="0,0,0,24">
+      <!-- Status & Mode Banner -->
+      <Grid Margin="0,0,0,16">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel>
+          <TextBlock Text="Panel de Control Principal" FontSize="20" FontWeight="SemiBold" Foreground="#102A43"/>
+          <TextBlock Text="{Binding SubtitleMessage}" Foreground="#627D98" Margin="0,4,0,0" FontSize="13"/>
+        </StackPanel>
+        <Border Grid.Column="1" Background="{Binding HardwareStatusColor}" CornerRadius="6" Padding="14,6" VerticalAlignment="Center">
+          <TextBlock Text="{Binding HardwareStatusBadge}" Foreground="White" FontWeight="Bold" FontSize="12"/>
+        </Border>
+      </Grid>
+
+      <!-- System Summary Stats -->
+      <UniformGrid Columns="5" Margin="0,0,0,20">
+        <Border Style="{StaticResource CardStyle}">
+          <StackPanel>
+            <TextBlock Text="TOTAL MEDIDORES" Foreground="#627D98" FontSize="11" FontWeight="Bold"/>
+            <TextBlock Text="{Binding TotalMeters}" FontSize="28" FontWeight="Bold" Foreground="#102A43" Margin="0,6,0,0"/>
+          </StackPanel>
+        </Border>
+        <Border Style="{StaticResource CardStyle}">
+          <StackPanel>
+            <TextBlock Text="CONECTADOS" Foreground="#138A72" FontSize="11" FontWeight="Bold"/>
+            <TextBlock Text="{Binding ConnectedMeters}" FontSize="28" FontWeight="Bold" Foreground="#138A72" Margin="0,6,0,0"/>
+          </StackPanel>
+        </Border>
+        <Border Style="{StaticResource CardStyle}">
+          <StackPanel>
+            <TextBlock Text="ESPERANDO / DESCONECTADOS" Foreground="#D97706" FontSize="11" FontWeight="Bold"/>
+            <TextBlock Text="{Binding DisconnectedMeters}" FontSize="28" FontWeight="Bold" Foreground="#D97706" Margin="0,6,0,0"/>
+          </StackPanel>
+        </Border>
+        <Border Style="{StaticResource CardStyle}">
+          <StackPanel>
+            <TextBlock Text="ERRORES" Foreground="#B23A48" FontSize="11" FontWeight="Bold"/>
+            <TextBlock Text="{Binding CommunicationErrors}" FontSize="28" FontWeight="Bold" Foreground="#B23A48" Margin="0,6,0,0"/>
+          </StackPanel>
+        </Border>
+        <Border Style="{StaticResource CardStyle}">
+          <StackPanel>
+            <TextBlock Text="ÚLTIMA ACTUALIZACIÓN" Foreground="#627D98" FontSize="11" FontWeight="Bold"/>
+            <TextBlock Text="{Binding LastUpdate}" FontSize="20" FontWeight="Bold" Foreground="#102A43" Margin="0,8,0,0"/>
+          </StackPanel>
+        </Border>
+      </UniformGrid>
+
+      <!-- Main Electrical Telemetry Cards Section -->
+      <TextBlock Text="Telemetría Eléctrica (TOV452)" FontSize="16" FontWeight="SemiBold"
+                 Foreground="#102A43" Margin="0,0,0,12"/>
+
+      <ItemsControl ItemsSource="{Binding MetricCards}">
+        <ItemsControl.ItemsPanel>
+          <ItemsPanelTemplate>
+            <UniformGrid Columns="4"/>
+          </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <Border Background="White" CornerRadius="8" Padding="16" Margin="0,0,12,12"
+                    BorderBrush="#CBD2D9" BorderThickness="1">
+              <StackPanel>
+                <TextBlock Text="{Binding Variable}" Foreground="#627D98" FontSize="12" FontWeight="SemiBold"/>
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,4">
+                  <TextBlock Text="{Binding Value}" FontSize="26" FontWeight="Bold" Foreground="#102A43"/>
+                  <TextBlock Text="{Binding Unit}" FontSize="14" FontWeight="SemiBold" Foreground="#627D98"
+                             VerticalAlignment="Bottom" Margin="6,0,0,4"/>
+                </StackPanel>
+                <TextBlock Text="{Binding Timestamp, StringFormat='Hora: {0}'}" FontSize="11" Foreground="#9FB3C8"/>
+              </StackPanel>
+            </Border>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+
+      <!-- System Status Banner -->
+      <Border Style="{StaticResource PanelStyle}" Margin="0,12,0,0">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
+          <StackPanel>
+            <TextBlock Text="Estado del Sistema" FontSize="16" FontWeight="SemiBold" Foreground="#102A43"/>
+            <TextBlock Text="{Binding AcquisitionState}" FontSize="14" Foreground="#138A72" FontWeight="SemiBold" Margin="0,4,0,0"/>
+            <TextBlock Text="El sistema se encuentra operando en modo hardware real sobre RS485 / Modbus RTU."
+                       Foreground="#627D98" TextWrapping="Wrap" Margin="0,6,0,0" FontSize="12"/>
+          </StackPanel>
+        </Grid>
+      </Border>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

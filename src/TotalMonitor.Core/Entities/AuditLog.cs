@@ -1,0 +1,2 @@
+namespace TotalMonitor.Core.Entities;
+public sealed class AuditLog { public long Id { get; private set; } public int? UserId { get; private set; } public string Action { get; private set; } = string.Empty; public DateTimeOffset Timestamp { get; private set; } public string Description { get; private set; } = string.Empty; private AuditLog() { } public AuditLog(int? userId, string action, string description) { UserId = userId; Action = action; Description = description; Timestamp = DateTimeOffset.UtcNow; } }

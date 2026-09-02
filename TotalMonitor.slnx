@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/TotalMonitor.App/TotalMonitor.App.csproj" />
+    <Project Path="src/TotalMonitor.Core/TotalMonitor.Core.csproj" />
+    <Project Path="src/TotalMonitor.Infrastructure/TotalMonitor.Infrastructure.csproj" />
+    <Project Path="src/TotalMonitor.Server/TotalMonitor.Server.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/TotalMonitor.Core.Tests/TotalMonitor.Core.Tests.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,189 @@
+<UserControl x:Class="TotalMonitor.App.MetersView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:TotalMonitor.App">
+  <Grid Margin="0,0,0,20">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+
+    <!-- Header Section -->
+    <Grid Grid.Row="0" Margin="0,0,0,16">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+      </Grid.ColumnDefinitions>
+      <StackPanel>
+        <TextBlock Text="Gestión de Medidores Eléctricos" FontSize="20" FontWeight="SemiBold" Foreground="#102A43"/>
+        <TextBlock Text="Configure y supervise los medidores TOV452 conectados al bus RS485 o en simulación." Foreground="#627D98" Margin="0,4,0,0"/>
+      </StackPanel>
+      <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+        <Button Content="+ NUEVO MEDIDOR" Command="{Binding NewMeterCommand}"
+                Background="#16B8A6" Foreground="White" FontWeight="SemiBold"
+                Padding="16,8" Height="36" Margin="0,0,8,0" BorderThickness="0" Cursor="Hand"/>
+        <Button Content="Actualizar" Command="{Binding RefreshCommand}"
+                Background="#E2E8F0" Foreground="#243B53" FontWeight="Medium"
+                Padding="12,8" Height="36" BorderThickness="0" Cursor="Hand"/>
+      </StackPanel>
+    </Grid>
+
+    <!-- Form Panel for Create / Edit (visible when IsFormOpen is true) -->
+    <Border Grid.Row="1" Background="White" CornerRadius="8" Padding="20" Margin="0,0,0,16"
+            BorderBrush="#CBD2D9" BorderThickness="1">
+      <Border.Style>
+        <Style TargetType="Border">
+          <Setter Property="Visibility" Value="Collapsed"/>
+          <Style.Triggers>
+            <DataTrigger Binding="{Binding IsFormOpen}" Value="True">
+              <Setter Property="Visibility" Value="Visible"/>
+            </DataTrigger>
+          </Style.Triggers>
+        </Style>
+      </Border.Style>
+      <StackPanel>
+        <Grid Margin="0,0,0,16">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
+          <TextBlock Text="{Binding FormTitle}" FontSize="16" FontWeight="SemiBold" Foreground="#102A43"/>
+          <Button Grid.Column="1" Content="✕" Command="{Binding CancelFormCommand}"
+                  Background="Transparent" BorderThickness="0" Foreground="#627D98"
+                  FontSize="14" FontWeight="Bold" Cursor="Hand" Padding="6,2"/>
+        </Grid>
+
+        <Grid Margin="0,0,0,12">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+          <StackPanel Margin="0,0,12,0">
+            <TextBlock Text="Nombre del medidor" FontWeight="Medium" Foreground="#334E68" Margin="0,0,0,4"/>
+            <TextBox Text="{Binding FormName, UpdateSourceTrigger=PropertyChanged}" Height="32"/>
+          </StackPanel>
+          <StackPanel Grid.Column="1" Margin="0,0,12,0">
+            <TextBlock Text="Modelo" FontWeight="Medium" Foreground="#334E68" Margin="0,0,0,4"/>
+            <ComboBox ItemsSource="{Binding AvailableModels}" SelectedItem="{Binding FormModel}" Height="32"/>
+          </StackPanel>
+          <StackPanel Grid.Column="2">
+            <TextBlock Text="Dirección Modbus (1-247)" FontWeight="Medium" Foreground="#334E68" Margin="0,0,0,4"/>
+            <TextBox Text="{Binding FormModbusAddress, UpdateSourceTrigger=PropertyChanged}" Height="32"/>
+          </StackPanel>
+        </Grid>
+
+        <Grid Margin="0,0,0,12">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+          <StackPanel Margin="0,0,12,0">
+            <TextBlock Text="Puerto COM" FontWeight="Medium" Foreground="#334E68" Margin="0,0,0,4"/>
+            <TextBox Text="{Binding FormComPort, UpdateSourceTrigger=PropertyChanged}" Height="32"/>
+          </StackPanel>
+          <StackPanel Grid.Column="1" Margin="0,0,12,0">
+            <TextBlock Text="Baud Rate" FontWeight="Medium" Foreground="#334E68" Margin="0,0,0,4"/>
+            <ComboBox ItemsSource="{Binding AvailableBaudRates}" SelectedItem="{Binding FormBaudRate}" Height="32"/>
+          </StackPanel>
+          <StackPanel Grid.Column="2" Margin="0,0,12,0">
+            <TextBlock Text="Paridad" FontWeight="Medium" Foreground="#334E68" Margin="0,0,0,4"/>
+            <ComboBox ItemsSource="{Binding AvailableParities}" SelectedItem="{Binding FormParity}" Height="32"/>
+          </StackPanel>
+          <StackPanel Grid.Column="3">
+            <TextBlock Text="Timeout (ms)" FontWeight="Medium" Foreground="#334E68" Margin="0,0,0,4"/>
+            <TextBox Text="{Binding FormTimeout, UpdateSourceTrigger=PropertyChanged}" Height="32"/>
+          </StackPanel>
+        </Grid>
+
+        <StackPanel Orientation="Horizontal" Margin="0,4,0,16">
+          <CheckBox IsChecked="{Binding FormIsEnabled}" Content="Medidor activo en ciclo de adquisición"
+                    VerticalAlignment="Center" FontWeight="Medium" Foreground="#243B53"/>
+        </StackPanel>
+
+        <!-- Form Actions and Message -->
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
+          <TextBlock Text="{Binding FormMessage}" VerticalAlignment="Center" TextWrapping="Wrap"
+                     FontWeight="SemiBold">
+            <TextBlock.Style>
+              <Style TargetType="TextBlock">
+                <Setter Property="Foreground" Value="#627D98"/>
+                <Style.Triggers>
+                  <DataTrigger Binding="{Binding IsFormSuccess}" Value="True">
+                    <Setter Property="Foreground" Value="#138A72"/>
+                  </DataTrigger>
+                  <DataTrigger Binding="{Binding IsFormSuccess}" Value="False">
+                    <Setter Property="Foreground" Value="#B23A48"/>
+                  </DataTrigger>
+                </Style.Triggers>
+              </Style>
+            </TextBlock.Style>
+          </TextBlock>
+          <StackPanel Grid.Column="1" Orientation="Horizontal">
+            <Button Content="Cancelar" Command="{Binding CancelFormCommand}"
+                    Background="#E2E8F0" Foreground="#243B53" Padding="14,6" Height="34" Margin="0,0,8,0"
+                    BorderThickness="0" Cursor="Hand"/>
+            <Button Content="Guardar Medidor" Command="{Binding SaveMeterCommand}"
+                    Background="#16B8A6" Foreground="White" FontWeight="SemiBold"
+                    Padding="18,6" Height="34" BorderThickness="0" Cursor="Hand"/>
+          </StackPanel>
+        </Grid>
+      </StackPanel>
+    </Border>
+
+    <!-- Table of Meters -->
+    <Border Grid.Row="2" Background="White" CornerRadius="8" Padding="16" BorderBrush="#CBD2D9" BorderThickness="1">
+      <Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Selection Action Bar -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,12"
+                    IsEnabled="{Binding HasSelectedMeter}">
+          <Button Content="Editar Seleccionado" Command="{Binding EditMeterCommand}"
+                  Background="#E2E8F0" Foreground="#243B53" Padding="12,6" Height="32" Margin="0,0,8,0"
+                  BorderThickness="0" Cursor="Hand"/>
+          <Button Content="Activar / Desactivar" Command="{Binding ToggleActiveCommand}"
+                  Background="#E2E8F0" Foreground="#243B53" Padding="12,6" Height="32" Margin="0,0,8,0"
+                  BorderThickness="0" Cursor="Hand"/>
+          <Button Content="Eliminar" Command="{Binding DeleteMeterCommand}"
+                  Background="#FEE2E2" Foreground="#991B1B" FontWeight="SemiBold"
+                  Padding="12,6" Height="32" BorderThickness="0" Cursor="Hand"/>
+        </StackPanel>
+
+        <ListView Grid.Row="1" ItemsSource="{Binding Rows}" SelectedItem="{Binding SelectedMeter}"
+                  VirtualizingPanel.IsVirtualizing="True" MinHeight="250" MaxHeight="450">
+          <ListView.View>
+            <GridView>
+              <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Address}" Width="50"/>
+              <GridViewColumn Header="NOMBRE" DisplayMemberBinding="{Binding Name}" Width="160"/>
+              <GridViewColumn Header="MODELO" DisplayMemberBinding="{Binding Model}" Width="90"/>
+              <GridViewColumn Header="PUERTO" DisplayMemberBinding="{Binding Port}" Width="90"/>
+              <GridViewColumn Header="BAUD RATE" DisplayMemberBinding="{Binding BaudRate}" Width="85"/>
+              <GridViewColumn Header="PARIDAD" DisplayMemberBinding="{Binding Parity}" Width="75"/>
+              <GridViewColumn Header="ACTIVO" DisplayMemberBinding="{Binding IsEnabledText}" Width="65"/>
+              <GridViewColumn Header="ESTADO" DisplayMemberBinding="{Binding State}" Width="110"/>
+              <GridViewColumn Header="ÚLTIMA COMUNICACIÓN" DisplayMemberBinding="{Binding LastCommunication}" Width="150"/>
+              <GridViewColumn Header="RESPUESTA" DisplayMemberBinding="{Binding ResponseTime}" Width="90"/>
+              <GridViewColumn Header="ERRORES" DisplayMemberBinding="{Binding Errors}" Width="70"/>
+            </GridView>
+          </ListView.View>
+        </ListView>
+      </Grid>
+    </Border>
+
+    <!-- Empty State Helper -->
+    <TextBlock Grid.Row="3" Text="Seleccione un medidor de la tabla para editar sus parámetros o cambiar su estado."
+               Foreground="#627D98" Margin="0,8,0,0" FontSize="12"/>
+  </Grid>
+</UserControl>
